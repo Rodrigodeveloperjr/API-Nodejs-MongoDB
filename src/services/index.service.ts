@@ -1,6 +1,7 @@
 import { IUserRequest, IUserUpdateRequest } from '../interfaces'
 import { User } from '../models/user'
 import { hash } from 'bcrypt'
+import { AppError } from '../errors'
 
 
 const createUserService = async ({ name, email, password, isAdm }: IUserRequest) => {
@@ -29,7 +30,7 @@ const updateUserService = async (id: string, { name, email, password, isAdm }: I
 
     if(!user) {
 
-        throw new Error('user not found')
+        throw new AppError('user not found', 404)
     }
 
     const newUser = {
@@ -52,7 +53,7 @@ const deleteUserService = async (id: string) => {
 
     if(!user) {
 
-        throw new Error('user not found')
+        throw new AppError('user not found', 404)
     }
 
     await User.deleteOne({ _id: user.id })
